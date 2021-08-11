@@ -1,0 +1,154 @@
+﻿@model Aur.ViewModels.CreatePartModel
+
+@{
+    ViewData["Title"] = "Редактировать главу";
+}
+
+
+<h3>Редактировать главу  </h3>
+
+<hr />
+<div class="row">
+    <div class="col-md-10">
+
+        <div class="row">
+            <div class="col-md-6">
+
+                <form asp-action="AddFiles" asp-controller="Parts" method="post" enctype="multipart/form-data">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        Загрузить файлы :
+                        <input type="file" class="add_files form-control" asp-for="UploadImages" multiple />
+                        <input type="hidden" name="partId" value=@ViewBag.partId />
+
+                    </div>
+
+                    <input type="hidden" name="mangaid" value="@Model.mangaid" />
+                    <input type="hidden" name="file_action" value="Edit" />
+                    <input type="submit" value="Загрузить" class="btn btn-primary" />
+                </form>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+
+              
+            </div>
+
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+
+                @functions
+                {
+                    public string F(List<byte[]> bytes)
+                    {
+                        List<string> res = new List<string>();
+                        foreach (var v in bytes)
+                        {
+                            res.Add(String.Join(" ", v));
+                        }
+                        return String.Join("|", res);
+                    }
+                }
+
+                @if (Model.Images != null)
+                {
+
+                <form asp-action="Edit" asp-controller="Parts" method="post" enctype="multipart/form-data">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <h4>
+                        Загруженные картинки :
+                    </h4>
+
+                  
+
+                    @if (Model.Images != null)
+                    {
+
+                        //bool [] checkboxs = new bool[Model.Images.Count];
+                        //for(int i=0;i<checkboxs.Length;i++) checkboxs[i] = true;
+                        int count = 0;
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Страница
+                                    </th>
+                                    <th>
+                                        Попадет в мангу?
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @*
+                                <input type="hidden" asp-for="Images" value="@Model.Images" />
+                                *@
+                                @foreach (var v in Model.Images)
+                                {
+                                    <tr>
+
+
+                                        <td>
+                                            @if (v != null)
+                                            {
+                                                <img style='width:100px; height:80px;' src="data:image/jpeg;base64,@(Convert.ToBase64String(v))" />
+                                            }
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="checkboxs" checked value="@count.ToString()" />
+                                        </td>
+
+                                    </tr>
+                                    count++;
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p> Пока не загрузили ниодной картинки </p>
+                    }
+
+
+                <div class="form-group">
+
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+
+                    <input type="hidden" asp-for="Title" value="@Model.Title" />
+
+                    <input type="hidden" name="partId" value="@ViewBag.partId" />
+
+                    <input type="hidden" name="mangaid" value="@Model.mangaid" />
+
+                    @Html.Hidden("Imgs2", Model.Images as List<byte[]>);
+                    @*<input type="hidden" name="" value="@F(Model.Images)" />*@
+                </div>
+                    <p>
+                        Страниц в главе :
+                        @Model.Images.Count()
+                    </p>
+                    <div class="form-group">
+                        <input type="submit" value="Сохранить главу" class="btn btn-primary" />
+                    </div>
+
+                </form>
+                }
+            </div>
+        </div>
+
+        <div>
+            <a asp-controller="Mangas" asp-action="Details" asp-route-id="@Model.mangaid">Назад</a>
+        </div>
+
+        @section Scripts {
+            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        }

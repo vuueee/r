@@ -1,0 +1,55 @@
+﻿@model Aur.Models.Part
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Просмотр версия 0.01 </h1>
+
+<div>
+    <h4>Part</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Pages)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Pages)
+        </dd>
+    </dl>
+
+    <div class="row">
+        <div class="col-md-6">
+
+            <h4>
+                Страницы :
+            </h4>
+
+            @if (Model.Images != null)
+            {
+                @foreach (var v in Model.Images)
+                {
+                    @if (v != null)
+                    {
+                        <img style='width:100px; height:80px;' src="data:image/jpeg;base64,@(Convert.ToBase64String(v.ImageData))" />
+                    }
+                }
+            }
+            else
+            {
+                <p> Страниц нет </p>
+            }
+        </div>
+
+    </div>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Изменить</a> |
+    <a asp-controller="Mangas" asp-action="Details" asp-route-id="@Model.MangaId">Назад</a>
+</div>

@@ -1,0 +1,35 @@
+﻿@model Aur.ViewModels.CreatePartModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Part</h4>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+
+        <form asp-action="AddFiles" asp-controller="Parts" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="UploadImages" class="control-label"></label>
+                <input type="file" asp-for="UploadImages" class="form-control" multiple />
+            </div>
+            <input type="submit" value="Загрузить" class="btn btn-primary" />
+        </form>
+
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
